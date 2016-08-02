@@ -77,10 +77,10 @@ stackpatch_end
 
 %macro sys.execve 3
 stackpatch_start
-    mov eax, SYS_EXECVE
-    mov ebx, %1
-    mov ecx, %2
     mov edx, %3
+    mov ecx, %2
+    mov ebx, %1
+    mov eax, SYS_EXECVE
     syscall
 stackpatch_end
 %endmacro
