@@ -53,13 +53,21 @@ stackpatch_end
 
 
 ; functions
+
+%macro use.thread.fork 0
 create_fthread:
     sys.fork
     cmp eax, 0                          ; if eax == 0, then this is the child process
     jz jmp_to_ptr
     ret
 
+jmp_to_ptr:                             ; jmp to register
+    mov eax, [esp+4]
+    jmp eax
+%endmacro
+
 ; TODO: implement ability to add arguments to threaded function
+%macro use.thread.create 0
 thread:                                 ; thanks to "http://nullprogram.com/blog/2015/05/15/".
     call .create_stack                  ; addr of stack in eax
     lea ecx, [eax + STACK_SIZE - 4]     ; ebx should now be the top of the new stack
@@ -70,9 +78,6 @@ thread:                                 ; thanks to "http://nullprogram.com/blog
 .create_stack:                          ; push args onto stack in reverse order
     sys.mmap2 0, STACK_SIZE, PROT_READWRITE, MAP_ANONYMOUS|MAP_PRIVATE|MAP_GROWSDOWN
     ret
-
-jmp_to_ptr:                             ; jmp to register
-    mov eax, [esp+4]
-    jmp eax
+%endmacro
 
 %endif  ; _THREAD_INC

@@ -6,12 +6,17 @@
 ; functions
 
 ; sbrk
+
+%macro use.utils.sbrk 0
 _sbrk_:           
     sys.brk ebx
     add eax, ebx
     sys.brk eax
     ret
+%endmacro
+
 ; memcpy
+%macro use.utils.memcpy 0
 _memcpy_:
     pop edi         ; ret
     pop eax         ; dest
@@ -26,6 +31,7 @@ _memcpy_:
     jnz .loop
     push edi
     ret
+%endmacro
 
 ; macro wrappers
 %macro sbrk 1     ; size
@@ -42,6 +48,24 @@ stackpatch_start
     push %1
     call _memcpy_
 stackpatch_end
+%endmacro
+
+; stack frame stuff
+%macro stackframe 1
+    push ebp
+    mov ebp, esp
+    sub esp, %1
+%endmacro
+
+; embed string in code
+%macro inline 1-*   ; moves addr of string into eax
+    call %%after_string
+        %rep %0
+            db %1
+        %rotate 1
+        %endrep
+    %%after_string:
+        pop eax
 %endmacro
 
 %endif  ; _UTILS_INC

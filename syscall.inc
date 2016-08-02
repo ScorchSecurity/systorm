@@ -20,6 +20,7 @@
 %define SYS_EXECVE 11
 %define SYS_BRK 45
 %define SYS_DUP2 63
+%define SYS_SOCKET 102
 %define SYS_CLONE 120
 %define SYS_MPROTECT 125
 %define SYS_MMAP2 192
@@ -140,6 +141,23 @@ stackpatch_start
     mov ecx, %2
     mov ebx, %1
     mov eax, SYS_WAITPID
+    syscall
+stackpatch_end
+%endmacro
+
+%macro sys.socketcall 2
+stackpatch_start
+    mov ecx, %2
+    mov ebx, %1
+    mov eax, SYS_SOCKET
+    syscall
+stackpatch_end
+%endmacro
+
+%macro sys.close 1
+stackpatch_start
+    mov ebx, %1
+    mov eax, SYS_CLOSE
     syscall
 stackpatch_end
 %endmacro
