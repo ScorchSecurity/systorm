@@ -39,7 +39,7 @@ As is evident, systorm defines a number of macros that can be used to perform us
 
 Additionally, all syscalls (prefixed with "sys.") are set up as macros, so they do not need to be included like other functions.
 
-A simple forking reverse shell (167 bytes) is:
+A simple forking reverse shell is:
 ```
 [BITS 32]
 
